@@ -1,0 +1,12 @@
+---
+- name: Installing phpMyAdmin
+  include_tasks: install_phpmyadmin.yaml
+
+- name: Install MariaDB
+  include_tasks: install_mariadb.yaml
+
+- debug: 
+    msg:
+      - "Open the browser 'http://{{ ansible_ssh_host }}'"
+      - "User ---> {{ root_user }}"
+      - "Pass ---> {{ root_pass }}"

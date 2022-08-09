@@ -1,0 +1,16 @@
+---
+packages:
+  - wget
+  - unzip
+
+packages_php:
+  - php-json 
+  - php-mbstring 
+  - php-mysqli
+  - php-fpm
+
+path_phpMyAdmin_conf: /etc/nginx/conf.d/phpMyAdmin.conf
+
+packages_mariadb:
+  - mariadb-server
+  - python3-PyMySQL

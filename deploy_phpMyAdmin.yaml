@@ -1,0 +1,7 @@
+--- 
+- name: Installing phpMyAdmin
+  hosts: all
+  become: true 
+
+  roles:
+    - role-deploy-phpmyadmin

@@ -1,0 +1,27 @@
+- name: Configure Firewalld
+  firewalld:
+    port: "3306/tcp"
+    permanent: true
+    state: enabled
+  notify:
+    - Restarted Firewalld
+
+- name: Install packeges for MariaDB
+  dnf:
+    name: "{{ packages_mariadb }}"
+    state: latest
+
+- name: Started and Enabled MariaDB 
+  service: 
+    name: mariadb 
+    enabled: true 
+    state: started
+
+- name: Configurations root password for MariaDB
+  mysql_user:
+    check_implicit_admin: true
+    login_user: "{{ root_user }}" 
+    login_password: "{{ root_pass }}"
+    user: root 
+    password: "{{ root_pass }}"
+    host: localhost 

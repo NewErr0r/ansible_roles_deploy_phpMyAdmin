@@ -1,0 +1,20 @@
+server {
+        listen       80;
+        server_name  {{ ansible_ssh_host }};
+        set $root_path {{ phpmyadmin_directory }};
+
+        location / {
+                root $root_path;
+                index index.php;
+        }
+
+        location ~ \.php$ {
+                #fastcgi_pass 127.0.0.1:9000;
+                fastcgi_pass unix:/run/php-fpm/www.sock;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $root_path$fastcgi_script_name;
+                include fastcgi_params;
+                fastcgi_param DOCUMENT_ROOT $root_path;
+                fastcgi_read_timeout 300;
+        }
+}

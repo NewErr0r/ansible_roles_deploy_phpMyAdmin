@@ -1,0 +1,75 @@
+- name: Install packages
+  dnf:
+    name: "{{ packages }}"
+    state: latest
+
+- name: Download phpMyAdmin
+  get_url:
+    url: "{{ download_url }}"
+    dest: "{{ download_path }}"
+
+- name: Creating a directory for phpmyadmin
+  file:
+    path: "{{ phpmyadmin_directory }}"
+    state: directory
+    recurse: yes 
+
+- name: Unarchive a file that is already on the remote machine
+  ansible.builtin.unarchive:
+    src: "{{ download_path }}/phpMyAdmin-5.2.0-all-languages.zip"
+    dest: "{{ phpmyadmin_directory }}"
+    remote_src: yes
+
+- name: Copy files 
+  copy: 
+    src: "{{ phpmyadmin_directory }}/phpMyAdmin-5.2.0-all-languages/"
+    dest: "{{ phpmyadmin_directory }}" 
+    remote_src: yes 
+
+- name: Install NGINX 
+  dnf: 
+    name: nginx 
+    state: latest 
+
+- name: Started and Enabled NGINX 
+  service: 
+    name: nginx 
+    enabled: true 
+    state: started 
+
+- name: Install packages PHP and PHP-FPM
+  dnf: 
+    name: "{{ packages_php }}"
+    state: latest
+
+- name: Started and Enabled PHP-FPM 
+  service: 
+    name: php-fpm
+    enabled: true 
+    state: started
+
+- name: Setting the owner for the directory
+  file:
+    path: "{{ phpmyadmin_directory }}"
+    state: directory
+    recurse: yes 
+    owner: apache
+    group: apache
+
+- name: Creating a configuration file for a virtual domain NGINX
+  template: 
+    src: phpMyAdmin.conf.j2
+    dest: "{{ path_phpMyAdmin_conf }}"
+  notify:
+    - Restarted NGINX
+
+- name: Configure Firewalld 
+  firewalld: 
+    service: "{{ item }}"
+    permanent: yes  
+    state: enabled 
+  loop: 
+    - http
+    - https 
+  notify: 
+    - Restarted Firewalld

@@ -1,0 +1,14 @@
+---
+- name: Restarted NGINX
+  service: 
+    name: nginx 
+    state: restarted
+
+- name: Restarted Firewalld
+  service: 
+    name: firewalld 
+    state: restarted
+
+
+
+    

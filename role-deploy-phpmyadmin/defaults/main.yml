@@ -1,0 +1,10 @@
+---
+### phpMyAdmin ###
+download_url: "https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.zip"
+download_path: /root
+
+phpmyadmin_directory: /usr/share/phpMyAdmin
+
+### MariaDB ###
+root_user: "root"
+root_pass: "P@ssw0rd"
